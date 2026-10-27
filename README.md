@@ -9,6 +9,7 @@ An image pipeline for a small Go service: a one-stage build on a full SDK image 
 | **Level** | Intermediate |
 | **Architecture** | [ARCHITECTURE.md](ARCHITECTURE.md), decisions in [docs/adr](docs/adr) |
 | **Measurements** | [docs/measurements.md](docs/measurements.md) |
+| **Technology notes** | [tech/README.md](tech/README.md): 26 beginner notes, one per technology |
 
 ## Prerequisites
 
@@ -164,6 +165,7 @@ internal/
 build/history/       v0, v1 and v2 Dockerfiles: the first three versions, kept for the measurements. Not linted.
 Dockerfile           v3 (and v4, built with an SBOM and provenance): the image that ships.
 scripts/             deploy.sh, sbom.sh, measure.sh, coverage.sh, lib.sh.
+tech/                one beginner note per technology used here, with an index (tech/README.md).
 tests/e2e/           one script per Done-when line.
 docs/                measurements.md (generated), adr/ (decision records).
 docker-compose.yml   the local registry and the deployed service (profile deploy).
