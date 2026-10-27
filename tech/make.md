@@ -118,10 +118,10 @@ test-e2e: netrc builder up ## the lesson's Done-when checks, one script each, ag
 
 ```makefile
 help: ## list the targets
-	@grep -E '^[a-z0-9-]+:.*## ' $(MAKEFILE_LIST) | sed -E 's/:.*## /\t/' | sort
+	@grep -E '^[a-z0-9-]+:.*## ' $(firstword $(MAKEFILE_LIST)) | sed -E 's/:.*## /\t/' | sort
 ```
 
-- `help` prints every target that has a `##` comment: `grep -E '^[a-z0-9-]+:.*## '` selects those lines from the Makefile (`$(MAKEFILE_LIST)`), `sed -E 's/:.*## /\t/'` replaces the colon and everything up to `## ` with a tab, and `sort` orders them.
+- `help` prints every target that has a `##` comment: `grep -E '^[a-z0-9-]+:.*## '` selects those lines from the Makefile (`$(firstword $(MAKEFILE_LIST))`: `MAKEFILE_LIST` names every file Make has read, and `-include .env` adds `.env` to it, so taking the first word keeps `grep` from prefixing each line with a file name), `sed -E 's/:.*## /\t/'` replaces the colon and everything up to `## ` with a tab, and `sort` orders them.
 
 ```makefile
 format: ## apply gofmt
