@@ -21,8 +21,8 @@ The scripts read tool output and numbers: the digest after `docker push`, the pe
 | `scripts/deploy.sh`, `tests/e2e/05_digest_pinning.sh` | `sed -n 's/.*digest: \(sha256:[0-9a-f]*\).*/\1/p'` extracts the digest from `docker push` output. |
 | `scripts/coverage.sh` | `sed` pulls the coverage percentage; `awk` compares it with 95. |
 | `scripts/lib.sh` | `awk` for arithmetic and rounding; `perl` for time; `sed` to read step numbers. |
-| `tests/e2e/03_warm_build_uses_the_cache.sh`, `scripts/measure.sh` | `tar --exclude=.git -cf - . | tar -xf - -C DIR` copies the project into a scratch folder. |
-| `tests/e2e/01_...sh` | `docker export ... | tar -t | grep -c netrc` lists an image's files and counts matches. |
+| `tests/e2e/03_warm_build_uses_the_cache.sh`, `scripts/measure.sh` | `tar --exclude=.git -cf - . \| tar -xf - -C DIR` copies the project into a scratch folder. |
+| `tests/e2e/01_...sh` | `docker export ... \| tar -t \| grep -c netrc` lists an image's files and counts matches. |
 | `Makefile` | `help` target: `grep -E` then `sed -E` then `sort` to print the menu. |
 
 ## How it works underneath
