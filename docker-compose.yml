@@ -1,0 +1,42 @@
+# A local registry, so pushes, digests and pulls can be tried without an account anywhere, and the service
+# deployed from it by digest. `make up` starts only the registry; `make run` deploys the service.
+name: shrink-and-harden
+
+services:
+  registry:
+    image: registry:2@sha256:a3d8aaa63ed8681a604f1dea0aa03f100d5895b6a58ace528858a7b332415373
+    ports:
+      # Loopback only. 5057 because macOS keeps 5000 for AirPlay Receiver.
+      - "127.0.0.1:${REGISTRY_PORT:-5057}:5000"
+    volumes:
+      - registry-data:/var/lib/registry
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--spider", "http://127.0.0.1:5000/v2/"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+    mem_limit: 256m
+    cpus: 0.5
+    pids_limit: 64
+
+  # The service as deployed: from the registry, by digest, read-only, no capabilities.
+  # SVC_IMAGE must be a digest reference; scripts/deploy.sh sets it. The default is a digest that matches nothing, so a
+  # deploy without it fails to pull instead of running whatever a tag points to today.
+  svc:
+    image: ${SVC_IMAGE:-localhost:5057/svc@sha256:0000000000000000000000000000000000000000000000000000000000000000}
+    profiles: [deploy]
+    ports:
+      - "127.0.0.1:${SVC_PORT:-8089}:8080"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 64m
+    cpus: 0.5
+    pids_limit: 64
+    stop_grace_period: 10s
+    restart: unless-stopped
+
+volumes:
+  registry-data:
