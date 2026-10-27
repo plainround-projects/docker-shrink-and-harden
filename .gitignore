@@ -1,0 +1,9 @@
+/netrc
+/svc
+/bin/
+*.test
+*.out
+coverage.out
+.env
+.DS_Store
+.omc/

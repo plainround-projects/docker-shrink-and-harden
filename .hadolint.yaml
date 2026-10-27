@@ -1,0 +1,5 @@
+# hadolint configuration. build/history/v0..v2 are teaching artifacts that exist to show what is wrong and are not linted.
+failure-threshold: info
+trustedRegistries:
+  - docker.io
+  - gcr.io
