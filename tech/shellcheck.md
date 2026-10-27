@@ -4,6 +4,14 @@
 
 ShellCheck is a **linter for shell scripts**. It reads a script without running it and warns about mistakes that shells accept silently: unquoted variables, commands whose failure is ignored, features that exist in Bash but not in `sh`. Every warning has a code such as `SC2086`. This repository runs `koalaman/shellcheck:v0.10.0` as a container.
 
+
+**Words used in this note**
+
+- **container**: A process (or a group of processes) run in isolation, with its own view of files, network and process list, but sharing the host's kernel.
+- **mount**: To make a folder or volume appear at a chosen path inside a container.
+- **registry**: A server that stores and serves images.
+- **shebang**: The first line of a script when it starts with `#!`. It names the program that runs the file, for example `#!/usr/bin/env bash`.
+
 ## Why this repository uses it
 
 Shell scripts fail in quiet ways. A missing quote works on every test value and breaks on the first path with a space. The template names shell scripts as code that needs a linter in CI.

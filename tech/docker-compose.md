@@ -4,6 +4,16 @@
 
 Docker Compose starts several containers together from one YAML file that lists **services**, **volumes** and **networks**. `docker compose up` creates what is missing and starts it. This repository uses Compose v2 (the `docker compose` command, 2.23).
 
+
+**Words used in this note**
+
+- **hash**: A short fingerprint computed from the bytes of a file. Change one byte and the fingerprint changes. SHA-256 is a common method; its result is called a digest.
+- **port**: A number from 1 to 65535 that says which program on a computer should receive a network connection. A web server listens on a port such as 8080; you reach it as `host:port`.
+- **shell**: A program that reads the commands you type (or a script's lines) and starts other programs for you. Bash is a shell.
+- **localhost**: The address that always means 'this same computer'. `127.0.0.1` is its numeric form.
+- **binary**: A file of machine code that the computer runs directly, as opposed to text that another program must read.
+- **HTTP**: The request-and-answer language of the web. A client sends a request (a method such as GET or POST, a path, optional headers and a body). The server answers with a status code (200 OK, 404 not found, 500 server error) and a body.
+
 ## Why this repository uses it
 
 The lesson needs a local registry to push to, and then a place to deploy the finished image by digest. One compose file holds both, and uses a **profile** so the deployed service only starts when asked.

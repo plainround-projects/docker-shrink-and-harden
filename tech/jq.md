@@ -4,6 +4,16 @@
 
 jq is a command-line tool for reading and reshaping **JSON**. JSON is a text format for structured data: objects `{"key": value}`, lists `[1, 2]`, strings, numbers, `true`, `false`, `null`. jq takes JSON on standard input and a **filter** (a small expression) and prints the result. Think of it as `grep` and `sed` for JSON.
 
+
+**Words used in this note**
+
+- **package**: Code written by someone else, bundled so that you can install it and use it in your project.
+- **image**: A read-only bundle of files and settings from which containers are started.
+- **registry**: A server that stores and serves images.
+- **hash**: A short fingerprint computed from the bytes of a file. Change one byte and the fingerprint changes. SHA-256 is a common method; its result is called a digest.
+- **localhost**: The address that always means 'this same computer'. `127.0.0.1` is its numeric form.
+- **shell**: A program that reads the commands you type (or a script's lines) and starts other programs for you. Bash is a shell.
+
 ## Why this repository uses it
 
 Docker, Trivy and BuildKit all print JSON. The scripts use jq to pull out one number or one list: the scanner's critical and high counts, the packages of an SBOM, the provenance inputs.

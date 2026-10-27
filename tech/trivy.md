@@ -4,6 +4,16 @@
 
 Trivy is a free **vulnerability scanner** from Aqua Security. Given a container image it lists the operating-system packages and the programs inside (for a Go binary it reads the Go version and modules built into it), looks each up in vulnerability databases, and prints known problems with a severity: LOW, MEDIUM, HIGH, CRITICAL. This repository runs the container `aquasec/trivy:0.58.0`.
 
+
+**Words used in this note**
+
+- **package**: Code written by someone else, bundled so that you can install it and use it in your project.
+- **binary**: A file of machine code that the computer runs directly, as opposed to text that another program must read.
+- **database**: A program that stores data in an organized way and answers questions about it. PostgreSQL is one.
+- **socket**: One end of a network connection. A program reads and writes it like a file.
+- **JSON**: A text format for data. An object is `{"name": "value"}`, a list is `[1, 2]`; values are strings, numbers, `true`, `false` or `null`.
+- **shell**: A program that reads the commands you type (or a script's lines) and starts other programs for you. Bash is a shell.
+
 ## Why this repository uses it
 
 The lesson wants a "vulnerability count" for every image version: it should fall as the image shrinks. The lesson names Docker Scout or Trivy. Docker Scout needs a Docker account, so this repository uses Trivy.

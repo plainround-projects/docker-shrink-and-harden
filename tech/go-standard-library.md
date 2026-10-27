@@ -10,6 +10,23 @@ Go ships with a large **standard library**: packages that come with the compiler
 - `os/signal` (with `syscall`): receiving operating-system signals.
 - Also `encoding/json`, `runtime/debug`-style build data (`runtime`), `time` and `net`.
 
+
+**Words used in this note**
+
+- **signal**: A short message the kernel delivers to a process. SIGTERM (number 15) politely asks it to stop; SIGKILL (number 9) cannot be caught and ends it at once.
+- **package**: Code written by someone else, bundled so that you can install it and use it in your project.
+- **compiler**: A program that turns source code into machine code that the computer can run directly.
+- **HTTP**: The request-and-answer language of the web. A client sends a request (a method such as GET or POST, a path, optional headers and a body). The server answers with a status code (200 OK, 404 not found, 500 server error) and a body.
+- **image**: A read-only bundle of files and settings from which containers are started.
+- **binary**: A file of machine code that the computer runs directly, as opposed to text that another program must read.
+- **port**: A number from 1 to 65535 that says which program on a computer should receive a network connection. A web server listens on a port such as 8080; you reach it as `host:port`.
+- **process**: A running program. The operating system gives each process a number (its process id, or PID), its own memory and its own list of open files.
+- **JSON**: A text format for data. An object is `{"name": "value"}`, a list is `[1, 2]`; values are strings, numbers, `true`, `false` or `null`.
+- **pipe**: The `|` symbol. It connects the output of the command on its left to the input of the command on its right.
+- **container**: A process (or a group of processes) run in isolation, with its own view of files, network and process list, but sharing the host's kernel.
+- **localhost**: The address that always means 'this same computer'. `127.0.0.1` is its numeric form.
+- **exit code**: A number a program returns when it ends. 0 means success; any other number means failure. A shell keeps the last one in `$?`.
+
 ## Why this repository uses it
 
 The lesson's service is a few lines of `net/http`. Using only the standard library means **no third-party code in the image**: the binary is small, the scanner has fewer packages to report, and `go mod download` has nothing to fetch. It also shows what a "production-grade" Go service needs without frameworks: timeouts, graceful shutdown, request logs.

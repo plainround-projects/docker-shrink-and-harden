@@ -4,6 +4,15 @@
 
 A **linter** reads code without running it and reports likely bugs and style problems. `golangci-lint` is a runner that bundles many Go linters and runs them together. This repository runs version **2.15.0** from the container `golangci/golangci-lint:v2.15.0-alpine`. Two simpler checks come with Go itself: `gofmt` (layout) and `go vet` (suspicious constructs).
 
+
+**Words used in this note**
+
+- **container**: A process (or a group of processes) run in isolation, with its own view of files, network and process list, but sharing the host's kernel.
+- **package**: Code written by someone else, bundled so that you can install it and use it in your project.
+- **HTTP**: The request-and-answer language of the web. A client sends a request (a method such as GET or POST, a path, optional headers and a body). The server answers with a status code (200 OK, 404 not found, 500 server error) and a body.
+- **localhost**: The address that always means 'this same computer'. `127.0.0.1` is its numeric form.
+- **cache**: Saved results that are reused so slow work is not repeated.
+
 ## Why this repository uses it
 
 The template asks for "the language's linter in CI". Go's culture is that the formatter has no options, so a diff never argues about layout, and `golangci-lint` adds checks for ignored errors, missing contexts and security.

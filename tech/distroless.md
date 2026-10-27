@@ -4,6 +4,17 @@
 
 A **distroless** image contains your program and only what it needs to run: certificate authorities, time-zone data, the `/etc/passwd` entries for a few users and little else. It has **no shell, no package manager and no `ls`**. "Distroless" means it carries no Linux distribution's tools. This repository uses `static-debian12:nonroot`: the "static" variant is meant for programs with no C library dependency, "debian12" names its Debian base release, and "nonroot" selects the default user `nonroot` (user id 65532).
 
+
+**Words used in this note**
+
+- **TLS**: The encryption used by HTTPS. A certificate is a file that proves who a server is; an authority that the client trusts has signed it.
+- **shell**: A program that reads the commands you type (or a script's lines) and starts other programs for you. Bash is a shell.
+- **package**: Code written by someone else, bundled so that you can install it and use it in your project.
+- **hash**: A short fingerprint computed from the bytes of a file. Change one byte and the fingerprint changes. SHA-256 is a common method; its result is called a digest.
+- **binary**: A file of machine code that the computer runs directly, as opposed to text that another program must read.
+- **HTTP**: The request-and-answer language of the web. A client sends a request (a method such as GET or POST, a path, optional headers and a body). The server answers with a status code (200 OK, 404 not found, 500 server error) and a body.
+- **localhost**: The address that always means 'this same computer'. `127.0.0.1` is its numeric form.
+
 ## Why this repository uses it
 
 Step 4 of the lesson asks for a smaller, safer runtime base. Fewer files means fewer packages for a scanner to report (Trivy finds 0 critical and 0 high), and an attacker who breaks into the program has no shell to use. The image is 8 MB.

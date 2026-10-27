@@ -10,7 +10,7 @@ These notes teach every technology this repository uses, from zero, through the 
 4. Shipping and proving what was shipped: [the registry and digests](docker-registry.md), [Docker Compose](docker-compose.md), [Trivy](trivy.md), [SBOM and provenance](sbom-and-provenance.md), [the netrc file](netrc.md).
 5. The commands that tie it together: [Bash](bash.md), [Unix text tools](unix-text-tools.md), [Make](make.md), [jq](jq.md), [curl](curl.md), [environment variables and `.env` files](env-files.md).
 6. Linting the build files: [hadolint](hadolint.md), [ShellCheck](shellcheck.md).
-7. Delivery and file formats: [GitHub Actions](github-actions.md), [YAML](yaml.md), [ignore files and `.editorconfig`](ignore-files-and-editorconfig.md).
+7. Delivery and file formats: [GitHub Actions](github-actions.md), [YAML](yaml.md), [ignore files and `.editorconfig`](ignore-files-and-editorconfig.md), [Markdown and the project documents](markdown-and-project-documents.md).
 
 ## Ten-minute shortlist
 
@@ -50,5 +50,6 @@ If you have ten minutes, read these three:
 | [github-actions.md](github-actions.md) | The CI workflow. |
 | [yaml.md](yaml.md) | The format of the compose file, the workflow and two linter configurations. |
 | [ignore-files-and-editorconfig.md](ignore-files-and-editorconfig.md) | `.gitignore`, `.dockerignore` and `.editorconfig`. |
+| [markdown-and-project-documents.md](markdown-and-project-documents.md) | `README.md`, `ARCHITECTURE.md`, `CHANGELOG.md`, the decision records, `LICENSE` and the other documents. |
 
 Versions pinned in this repository: Go 1.26 (image `golang:1.26-bookworm`, Go 1.26.10), golangci-lint 2.15.0, govulncheck 1.1.4, Docker engine 24.0.6, buildx 0.11.2 (BuildKit 0.33), registry 2, distroless static-debian12, Trivy 0.58.0, hadolint 2.12.0, ShellCheck 0.10.0.

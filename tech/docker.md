@@ -4,6 +4,17 @@
 
 Docker runs programs in isolated boxes called **containers**. A container looks like a small computer with its own files, process list and network, but it is an ordinary process on the host, fenced in by Linux kernel features. The `docker` command talks to a background service, the **Docker engine**, which builds **images**, starts containers and manages **networks** and **volumes**. On a Mac, a small hidden Linux virtual machine (started by Docker Desktop) provides the Linux kernel. This repository was built with engine 24.0.6.
 
+
+**Words used in this note**
+
+- **terminal**: A window where you type commands as text and read the answers. The program inside it that reads your commands is the shell.
+- **socket**: One end of a network connection. A program reads and writes it like a file.
+- **localhost**: The address that always means 'this same computer'. `127.0.0.1` is its numeric form.
+- **hash**: A short fingerprint computed from the bytes of a file. Change one byte and the fingerprint changes. SHA-256 is a common method; its result is called a digest.
+- **port**: A number from 1 to 65535 that says which program on a computer should receive a network connection. A web server listens on a port such as 8080; you reach it as `host:port`.
+- **shell**: A program that reads the commands you type (or a script's lines) and starts other programs for you. Bash is a shell.
+- **JSON**: A text format for data. An object is `{"name": "value"}`, a list is `[1, 2]`; values are strings, numbers, `true`, `false` or `null`.
+
 ## Why this repository uses it
 
 Everything the lesson measures is about images and containers: how big they are, how long they take to build, what is inside them, what user they run as, and how they stop.

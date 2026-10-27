@@ -4,6 +4,16 @@
 
 hadolint is a **linter for Dockerfiles**. It reads a Dockerfile and reports instructions that break good practice, with rule codes such as `DL3008` (Dockerfile rules) and, through the ShellCheck program built into it, `SC2086` (problems in the shell commands inside `RUN` lines). This repository runs `hadolint/hadolint:v2.12.0` as a container.
 
+
+**Words used in this note**
+
+- **shell**: A program that reads the commands you type (or a script's lines) and starts other programs for you. Bash is a shell.
+- **container**: A process (or a group of processes) run in isolation, with its own view of files, network and process list, but sharing the host's kernel.
+- **image**: A read-only bundle of files and settings from which containers are started.
+- **mount**: To make a folder or volume appear at a chosen path inside a container.
+- **registry**: A server that stores and serves images.
+- **hash**: A short fingerprint computed from the bytes of a file. Change one byte and the fingerprint changes. SHA-256 is a common method; its result is called a digest.
+
 ## Why this repository uses it
 
 The template asks for `hadolint` in CI. The lesson's whole subject is a good, small, safe Dockerfile, so a tool that catches the classic mistakes (unpinned base, missing `USER`, shell-form commands) keeps it that way.

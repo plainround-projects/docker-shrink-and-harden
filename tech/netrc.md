@@ -4,6 +4,16 @@
 
 `.netrc` is an old Unix file that stores login names and passwords for network hosts, one machine per entry. Programs such as `curl`, `git` and the Go tool read it to log in to servers automatically. The format is lines of words: `machine HOST login NAME password SECRET`. It lives in the user's home folder, and programs refuse it if other users can read it.
 
+
+**Words used in this note**
+
+- **package**: Code written by someone else, bundled so that you can install it and use it in your project.
+- **image**: A read-only bundle of files and settings from which containers are started.
+- **layer**: One step of an image build, stored as its own set of file changes. Unchanged layers are reused from the cache.
+- **HTTP**: The request-and-answer language of the web. A client sends a request (a method such as GET or POST, a path, optional headers and a body). The server answers with a status code (200 OK, 404 not found, 500 server error) and a body.
+- **mount**: To make a folder or volume appear at a chosen path inside a container.
+- **cache**: Saved results that are reused so slow work is not repeated.
+
 ## Why this repository uses it
 
 The lesson invents a **private package server**, `packages.internal.example`, that needs a token to download a Go module. The token is passed to `go mod download` through a `.netrc`. The point of the lesson is how to give the builder that file **without leaving it in the image**.

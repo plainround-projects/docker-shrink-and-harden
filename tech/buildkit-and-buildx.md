@@ -4,6 +4,15 @@
 
 **BuildKit** is Docker's modern image builder. It builds independent steps in parallel, supports secret and cache mounts, and can attach extra documents (an SBOM and provenance) to an image. **buildx** is the `docker` command's front end to BuildKit: `docker buildx build`, `docker buildx create`, `docker buildx imagetools inspect`. A **builder** is a BuildKit instance. This repository uses buildx 0.11 on Docker Desktop and BuildKit 0.33 inside the builder container.
 
+
+**Words used in this note**
+
+- **localhost**: The address that always means 'this same computer'. `127.0.0.1` is its numeric form.
+- **package**: Code written by someone else, bundled so that you can install it and use it in your project.
+- **hash**: A short fingerprint computed from the bytes of a file. Change one byte and the fingerprint changes. SHA-256 is a common method; its result is called a digest.
+- **JSON**: A text format for data. An object is `{"name": "value"}`, a list is `[1, 2]`; values are strings, numbers, `true`, `false` or `null`.
+- **compiler**: A program that turns source code into machine code that the computer can run directly.
+
 ## Why this repository uses it
 
 Three lesson steps need BuildKit features: the secret mount (step 3), cache mounts (step 3), and the SBOM and provenance (step 6). The SBOM needs a builder of the `docker-container` kind, which this repository creates for itself. A private builder also has its own cache, so a cold build here is really cold and does not depend on other work on the machine.

@@ -6,6 +6,20 @@ An **SBOM**, a software bill of materials, is a list of everything inside a piec
 
 **Provenance** is a record of how and where an artifact was built: which source, which build steps, which base images (by digest), which arguments. It follows the **SLSA** ("Supply-chain Levels for Software Artifacts") format. Together they let you answer "what is in this image, and where did it come from?" without opening it.
 
+
+**Words used in this note**
+
+- **package**: Code written by someone else, bundled so that you can install it and use it in your project.
+- **JSON**: A text format for data. An object is `{"name": "value"}`, a list is `[1, 2]`; values are strings, numbers, `true`, `false` or `null`.
+- **image**: A read-only bundle of files and settings from which containers are started.
+- **hash**: A short fingerprint computed from the bytes of a file. Change one byte and the fingerprint changes. SHA-256 is a common method; its result is called a digest.
+- **database**: A program that stores data in an organized way and answers questions about it. PostgreSQL is one.
+- **binary**: A file of machine code that the computer runs directly, as opposed to text that another program must read.
+- **registry**: A server that stores and serves images.
+- **layer**: One step of an image build, stored as its own set of file changes. Unchanged layers are reused from the cache.
+- **compiler**: A program that turns source code into machine code that the computer can run directly.
+- **localhost**: The address that always means 'this same computer'. `127.0.0.1` is its numeric form.
+
 ## Why this repository uses it
 
 Step 6 of the lesson: "answer 'does this image contain library X, and which version?' from the SBOM alone". When a new vulnerability is announced you can check every image you ship by reading its SBOM instead of unpacking it.

@@ -4,6 +4,19 @@
 
 An **environment variable** is a named piece of text that the operating system passes to every program it starts, for example `SVC_PORT=8089`. A **`.env` file** is a plain text file of `NAME=value` lines that tools such as Docker Compose and Make load for you.
 
+
+**Words used in this note**
+
+- **port**: A number from 1 to 65535 that says which program on a computer should receive a network connection. A web server listens on a port such as 8080; you reach it as `host:port`.
+- **registry**: A server that stores and serves images.
+- **shell**: A program that reads the commands you type (or a script's lines) and starts other programs for you. Bash is a shell.
+- **mount**: To make a folder or volume appear at a chosen path inside a container.
+- **image**: A read-only bundle of files and settings from which containers are started.
+- **localhost**: The address that always means 'this same computer'. `127.0.0.1` is its numeric form.
+- **exit code**: A number a program returns when it ends. 0 means success; any other number means failure. A shell keeps the last one in `$?`.
+- **process**: A running program. The operating system gives each process a number (its process id, or PID), its own memory and its own list of open files.
+- **package**: Code written by someone else, bundled so that you can install it and use it in your project.
+
 ## Why this repository uses it
 
 The template says configuration comes from the environment and `.env.example` lists every variable with no real secret. The service itself reads three variables (`PORT`, `LOG_LEVEL`, `SHUTDOWN_TIMEOUT_SECONDS`); the Makefile and compose file read three more.

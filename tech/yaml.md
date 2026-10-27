@@ -4,6 +4,15 @@
 
 YAML is a text format for structured data: nested lists and key-value maps, written with indentation. It is easy to read, and it is the format of Docker Compose files, GitHub Actions workflows and the hadolint settings in this repository. **Indentation is meaning**: the number of spaces decides which key belongs to which parent. Tabs are not allowed for indentation.
 
+
+**Words used in this note**
+
+- **registry**: A server that stores and serves images.
+- **JSON**: A text format for data. An object is `{"name": "value"}`, a list is `[1, 2]`; values are strings, numbers, `true`, `false` or `null`.
+- **localhost**: The address that always means 'this same computer'. `127.0.0.1` is its numeric form.
+- **shell**: A program that reads the commands you type (or a script's lines) and starts other programs for you. Bash is a shell.
+- **port**: A number from 1 to 65535 that says which program on a computer should receive a network connection. A web server listens on a port such as 8080; you reach it as `host:port`.
+
 ## Why this repository uses it
 
 The tools it uses chose YAML: Compose (`docker-compose.yml`), GitHub Actions (`.github/workflows/ci.yml`), hadolint (`.hadolint.yaml`) and golangci-lint (`.golangci.yml`). You cannot read those files without knowing the few rules below.

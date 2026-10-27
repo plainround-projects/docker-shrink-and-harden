@@ -9,7 +9,7 @@ An image pipeline for a small Go service: a one-stage build on a full SDK image 
 | **Level** | Intermediate |
 | **Architecture** | [ARCHITECTURE.md](ARCHITECTURE.md), decisions in [docs/adr](docs/adr) |
 | **Measurements** | [docs/measurements.md](docs/measurements.md) |
-| **Technology notes** | [tech/README.md](tech/README.md): 26 beginner notes, one per technology |
+| **Technology notes** | [tech/README.md](tech/README.md): 27 beginner notes, one per technology |
 
 ## Prerequisites
 

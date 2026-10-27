@@ -4,6 +4,23 @@
 
 Make runs named recipes from a file called `Makefile`. Each recipe is a **target**; a target may depend on other targets, which run first. It was made for compiling programs; here it is a menu of project commands (`make up`, `make test`, `make lint`). macOS ships GNU Make 3.81, which this file is written for.
 
+
+**Words used in this note**
+
+- **container**: A process (or a group of processes) run in isolation, with its own view of files, network and process list, but sharing the host's kernel.
+- **shell**: A program that reads the commands you type (or a script's lines) and starts other programs for you. Bash is a shell.
+- **image**: A read-only bundle of files and settings from which containers are started.
+- **hash**: A short fingerprint computed from the bytes of a file. Change one byte and the fingerprint changes. SHA-256 is a common method; its result is called a digest.
+- **package**: Code written by someone else, bundled so that you can install it and use it in your project.
+- **port**: A number from 1 to 65535 that says which program on a computer should receive a network connection. A web server listens on a port such as 8080; you reach it as `host:port`.
+- **environment variable**: A named piece of text the operating system hands to a program when it starts, such as `PORT=8080`. Programs read these for their settings.
+- **cache**: Saved results that are reused so slow work is not repeated.
+- **mount**: To make a folder or volume appear at a chosen path inside a container.
+- **registry**: A server that stores and serves images.
+- **database**: A program that stores data in an organized way and answers questions about it. PostgreSQL is one.
+- **volume**: Storage managed by Docker that outlives any one container.
+- **terminal**: A window where you type commands as text and read the answers. The program inside it that reads your commands is the shell.
+
 ## Why this repository uses it
 
 The template says a reader should need only `make run` and `make test`. Because no Go is installed on the host, the Makefile also hides the long `docker run` commands that run the Go tools in containers.
@@ -96,6 +113,51 @@ test-e2e: netrc builder up ## the lesson's Done-when checks, one script each, ag
 
 - `measure: netrc builder up` has three prerequisites, run in order, then `scripts/measure.sh`.
 - `test-e2e` loops over `tests/e2e/*.sh` in a shell `for` and stops at the first failure (`|| exit 1`).
+
+### The remaining targets
+
+```makefile
+help: ## list the targets
+	@grep -E '^[a-z0-9-]+:.*## ' $(MAKEFILE_LIST) | sed -E 's/:.*## /\t/' | sort
+```
+
+- `help` prints every target that has a `##` comment: `grep -E '^[a-z0-9-]+:.*## '` selects those lines from the Makefile (`$(MAKEFILE_LIST)`), `sed -E 's/:.*## /\t/'` replaces the colon and everything up to `## ` with a tab, and `sort` orders them.
+
+```makefile
+format: ## apply gofmt
+	$(DOCKER_GO) $(GO_IMAGE) gofmt -w .
+
+audit: ## govulncheck: known vulnerabilities in the module and the standard library
+	$(DOCKER_GO) $(GO_IMAGE) go run $(GOVULNCHECK) ./...
+```
+
+- `format` runs `gofmt -w .`, which rewrites Go files into the standard layout (`-w` writes the change).
+- `audit` runs `govulncheck` with `go run PACKAGE@VERSION`, which downloads and runs the pinned tool for one command; it checks the module and the standard library against the Go vulnerability database.
+
+```makefile
+check: lint test ## lint plus unit tests
+
+measure: netrc builder up ## build v0 to v4, measure size, builds and scanner counts, write docs/measurements.md (about ten minutes)
+	scripts/measure.sh
+
+sbom: netrc builder up ## build v4: the service image with an SBOM and provenance, pushed to the local registry
+	scripts/sbom.sh
+
+test-e2e: netrc builder up ## the lesson's Done-when checks, one script each, against real images
+	for script in tests/e2e/*.sh; do echo "== $$script"; "$$script" || exit 1; done
+
+down: ## stop the registry and the service; the registry volume stays
+	docker compose --profile deploy down
+
+clean: ## stop everything, delete the registry volume, the builder and the Go caches
+	docker compose --profile deploy down --volumes
+	-docker buildx rm $(BUILDER)
+	-docker volume rm shrink-gomod shrink-gobuild shrink-golangci
+```
+
+- `check` runs `lint` then `test`.
+- `measure`, `sbom` and `test-e2e` all depend on `netrc builder up` (create the demo credentials, create the BuildKit builder, start the registry), then run their script: `measure.sh`, `sbom.sh`, or every `tests/e2e/*.sh` in a loop that stops at the first failure (`|| exit 1`). `"$$script"` uses `$$` so the shell, not Make, reads the loop variable.
+- `down` stops the registry and the service (the `deploy` profile); the registry volume stays. `clean` also deletes the volume, removes the builder (`docker buildx rm`) and the Go cache volumes (`docker volume rm ...`), and deletes the demo credentials file (`rm -f netrc`). The leading `-` on two lines lets them fail, for example when the builder is already gone, without stopping Make.
 
 ## Try it yourself
 

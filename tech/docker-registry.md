@@ -6,6 +6,16 @@ A **registry** is a server that stores and serves container images. Docker Hub i
 
 This repository runs the official `registry:2` image as a local registry on `127.0.0.1:5057`, so pushing, pulling and inspecting digests needs no account anywhere.
 
+
+**Words used in this note**
+
+- **port**: A number from 1 to 65535 that says which program on a computer should receive a network connection. A web server listens on a port such as 8080; you reach it as `host:port`.
+- **localhost**: The address that always means 'this same computer'. `127.0.0.1` is its numeric form.
+- **JSON**: A text format for data. An object is `{"name": "value"}`, a list is `[1, 2]`; values are strings, numbers, `true`, `false` or `null`.
+- **HTTP**: The request-and-answer language of the web. A client sends a request (a method such as GET or POST, a path, optional headers and a body). The server answers with a status code (200 OK, 404 not found, 500 server error) and a body.
+- **TLS**: The encryption used by HTTPS. A certificate is a file that proves who a server is; an authority that the client trusts has signed it.
+- **API**: The set of requests one program offers to other programs, for example 'GET /health returns ok'.
+
 ## Why this repository uses it
 
 Step 5 of the lesson: "pin and push by digest ... retagging `latest` to a different image does not change what your deploy command runs". You can only demonstrate that with a registry.

@@ -4,6 +4,17 @@
 
 A **Dockerfile** is a text recipe for building a **Docker image**: a read-only bundle of files (a minimal operating system folder tree plus your program). Docker runs the instructions from top to bottom; each instruction that changes files saves a **layer**, a stored difference, and later builds reuse unchanged layers. This repository keeps **four** Dockerfiles that tell one story, each a step better than the last.
 
+
+**Words used in this note**
+
+- **hash**: A short fingerprint computed from the bytes of a file. Change one byte and the fingerprint changes. SHA-256 is a common method; its result is called a digest.
+- **compiler**: A program that turns source code into machine code that the computer can run directly.
+- **binary**: A file of machine code that the computer runs directly, as opposed to text that another program must read.
+- **package**: Code written by someone else, bundled so that you can install it and use it in your project.
+- **shell**: A program that reads the commands you type (or a script's lines) and starts other programs for you. Bash is a shell.
+- **port**: A number from 1 to 65535 that says which program on a computer should receive a network connection. A web server listens on a port such as 8080; you reach it as `host:port`.
+- **localhost**: The address that always means 'this same computer'. `127.0.0.1` is its numeric form.
+
 ## Why this repository uses it
 
 The lesson is "shrink and harden an image": 937 MB with a leaked token down to 8 MB with none, pinned by digest. Each step is a Dockerfile you can build and measure.
@@ -46,6 +57,53 @@ ENTRYPOINT ["/app"]
 - `ARG PKG_TOKEN` declares a build argument; the build is run with `--build-arg PKG_TOKEN=demo-token-123`.
 - `COPY . .` puts the whole project in the image, so the source stays in the final image too.
 - The `RUN` writes the token into `/root/.netrc` so `go mod download` could authenticate to a private package server, then builds the program. Both the `ARG` line and this `RUN` line (with the value) appear in `docker history`. Deleting the file later would not remove them: the earlier layer still exists.
+
+### v1: multi-stage
+
+```dockerfile
+# v1: multi-stage. The compiler, the source and the module cache stay in the build stage; only the static binary is
+# copied into a slim runtime image. The token is not used yet (this module has no private dependency to fetch);
+# v2 adds it back, as a secret.
+FROM golang:1.26-bookworm@sha256:632dff7351799a5a9954a48dc06670ade72ee44e8c351cdc0e5a57af2fea21af AS build
+WORKDIR /src
+COPY go.mod ./
+RUN go mod download
+COPY . .
+RUN CGO_ENABLED=0 go build -o /out/app ./cmd/svc
+
+FROM debian:bookworm-slim@sha256:7ff6ba31527b9e336162fa061746c366c4b2032f4d2cff2078bea43f78efe3f8
+COPY --from=build /out/app /app
+ENTRYPOINT ["/app"]
+```
+
+- The comment at the top explains the idea: the compiler, the source and the module cache stay in the **build stage**; only the finished binary is copied into the runtime stage.
+- `FROM golang:1.26-bookworm@sha256:... AS build` starts the first stage from the Go toolchain image, pinned by digest, and names the stage `build`.
+- `WORKDIR /src` sets the folder for the next instructions. `COPY go.mod ./` copies only the module file and `RUN go mod download` fetches the dependencies (none here, but this is the order that keeps the layer cached when only source changes). `COPY . .` copies the source. `RUN CGO_ENABLED=0 go build -o /out/app ./cmd/svc` compiles a static binary (no C library needed) to `/out/app`.
+- The second `FROM debian:bookworm-slim@sha256:...` starts a new, small image. `COPY --from=build /out/app /app` copies only the binary out of the first stage; everything else in the build stage is discarded. `ENTRYPOINT ["/app"]` runs it, in exec form, so the program is PID 1.
+
+### v2: secret and cache mounts
+
+```dockerfile
+# v2: a BuildKit secret mount for the token (it exists only during that one command and is never saved in a layer)
+# and cache mounts for the module and compiler caches (they live on the builder, not in the image).
+FROM golang:1.26-bookworm@sha256:632dff7351799a5a9954a48dc06670ade72ee44e8c351cdc0e5a57af2fea21af AS build
+WORKDIR /src
+COPY go.mod ./
+RUN --mount=type=secret,id=netrc,target=/root/.netrc \
+    --mount=type=cache,target=/go/pkg/mod \
+    go mod download
+COPY . .
+RUN --mount=type=cache,target=/go/pkg/mod --mount=type=cache,target=/root/.cache/go-build \
+    CGO_ENABLED=0 go build -v -o /out/app ./cmd/svc
+
+FROM debian:bookworm-slim@sha256:7ff6ba31527b9e336162fa061746c366c4b2032f4d2cff2078bea43f78efe3f8
+COPY --from=build /out/app /app
+ENTRYPOINT ["/app"]
+```
+
+- `RUN --mount=type=secret,id=netrc,target=/root/.netrc \` makes the secret named `netrc` (supplied by `docker buildx build --secret id=netrc,src=...`) appear as the file `/root/.netrc` for the duration of that one command only. It is never stored in a layer or in the history. The trailing backslash continues the instruction on the next line.
+- `--mount=type=cache,target=/go/pkg/mod` keeps Go's downloaded-module folder on the builder between builds, outside the image, so a repeated build does not download again. The second `RUN` mounts the module cache and `/root/.cache/go-build` (Go's compiled-package cache); `go build -v` prints each package it compiles, which `tests/e2e/03` counts to prove the cache works.
+- The runtime stage is the same as v1.
 
 ### v3: the shipped Dockerfile
 

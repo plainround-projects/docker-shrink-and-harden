@@ -10,6 +10,17 @@ Unix programs that each do one small job on text, and are joined with pipes (`a 
 - **tr** replaces or deletes characters. **cut** takes columns. **sort** orders lines. **head/tail** take the first/last lines. **tar** packs and unpacks folders into one stream.
 - **perl** is a scripting language; here a one-liner prints the time with sub-second precision.
 
+
+**Words used in this note**
+
+- **pipe**: The `|` symbol. It connects the output of the command on its left to the input of the command on its right.
+- **exit code**: A number a program returns when it ends. 0 means success; any other number means failure. A shell keeps the last one in `$?`.
+- **hash**: A short fingerprint computed from the bytes of a file. Change one byte and the fingerprint changes. SHA-256 is a common method; its result is called a digest.
+- **image**: A read-only bundle of files and settings from which containers are started.
+- **shell**: A program that reads the commands you type (or a script's lines) and starts other programs for you. Bash is a shell.
+- **glob**: A file-name pattern such as `*.log`. The shell replaces it with every matching file name.
+- **signal**: A short message the kernel delivers to a process. SIGTERM (number 15) politely asks it to stop; SIGKILL (number 9) cannot be caught and ends it at once.
+
 ## Why this repository uses it
 
 The scripts read tool output and numbers: the digest after `docker push`, the percentage after `go test -cover`, the seconds a build took. These tools turn text into values.

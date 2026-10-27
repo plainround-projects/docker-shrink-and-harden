@@ -4,6 +4,15 @@
 
 A **module** is a group of Go packages that are versioned and released together. The file `go.mod` at the top of the project names the module and lists what it needs. It is Go's package manager file. When a module has third-party dependencies, a second file `go.sum` records their expected hashes.
 
+
+**Words used in this note**
+
+- **package**: Code written by someone else, bundled so that you can install it and use it in your project.
+- **hash**: A short fingerprint computed from the bytes of a file. Change one byte and the fingerprint changes. SHA-256 is a common method; its result is called a digest.
+- **cache**: Saved results that are reused so slow work is not repeated.
+- **mount**: To make a folder or volume appear at a chosen path inside a container.
+- **layer**: One step of an image build, stored as its own set of file changes. Unchanged layers are reused from the cache.
+
 ## Why this repository uses it
 
 Every Go project needs a `go.mod`. Here it also explains something about the lesson: the service has **no third-party dependency**, so `go mod download` has nothing to fetch and there is no `go.sum`. The Dockerfile still runs `go mod download` (with the build secret and a cache mount) because the first real dependency, or a private one, would need exactly that.

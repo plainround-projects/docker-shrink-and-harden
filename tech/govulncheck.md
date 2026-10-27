@@ -4,6 +4,18 @@
 
 govulncheck is Go's official tool for finding **known vulnerabilities** in the code you use. It looks at the packages and the standard library version your program depends on and compares them with the Go vulnerability database (`vuln.go.dev`). Unlike a plain dependency list, it checks whether your code actually **calls** the vulnerable function. This repository runs `govulncheck@v1.1.4`.
 
+
+**Words used in this note**
+
+- **package**: Code written by someone else, bundled so that you can install it and use it in your project.
+- **database**: A program that stores data in an organized way and answers questions about it. PostgreSQL is one.
+- **compiler**: A program that turns source code into machine code that the computer can run directly.
+- **container**: A process (or a group of processes) run in isolation, with its own view of files, network and process list, but sharing the host's kernel.
+- **exit code**: A number a program returns when it ends. 0 means success; any other number means failure. A shell keeps the last one in `$?`.
+- **mount**: To make a folder or volume appear at a chosen path inside a container.
+- **cache**: Saved results that are reused so slow work is not repeated.
+- **image**: A read-only bundle of files and settings from which containers are started.
+
 ## Why this repository uses it
 
 The template says dependencies are "checked by the CI's audit step". For a Go service with no third-party modules the dependencies are the compiler's own standard library. This tool earned its place: on Go 1.25.14 it reported ten standard-library vulnerabilities in code this service really uses (for example in `net/http` and `crypto/x509`), fixed only in the 1.26 line. The repository moved to Go 1.26 because of it.

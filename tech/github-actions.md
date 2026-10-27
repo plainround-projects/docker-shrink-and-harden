@@ -4,6 +4,14 @@
 
 GitHub Actions is GitHub's built-in automation. Workflows are YAML files under `.github/workflows/`. On an **event** such as a push, GitHub starts a fresh virtual machine (a **runner**), checks out your code and runs your steps. The result shows as a green or red mark on the commit.
 
+
+**Words used in this note**
+
+- **image**: A read-only bundle of files and settings from which containers are started.
+- **shell**: A program that reads the commands you type (or a script's lines) and starts other programs for you. Bash is a shell.
+- **container**: A process (or a group of processes) run in isolation, with its own view of files, network and process list, but sharing the host's kernel.
+- **registry**: A server that stores and serves images.
+
 ## Why this repository uses it
 
 The template says CI runs format, lint, tests and the audit on every push, mirroring the commands a reader runs. The workflow only calls `make` targets, so CI and a laptop run the same commands.

@@ -8,6 +8,18 @@ Three small text files that tell tools what to skip or how to format.
 - `.dockerignore` tells `docker build` which files never to send to the builder.
 - `.editorconfig` tells editors and tools basic formatting rules: line endings, indentation, trailing spaces.
 
+
+**Words used in this note**
+
+- **cache**: Saved results that are reused so slow work is not repeated.
+- **JSON**: A text format for data. An object is `{"name": "value"}`, a list is `[1, 2]`; values are strings, numbers, `true`, `false` or `null`.
+- **layer**: One step of an image build, stored as its own set of file changes. Unchanged layers are reused from the cache.
+- **compiler**: A program that turns source code into machine code that the computer can run directly.
+- **binary**: A file of machine code that the computer runs directly, as opposed to text that another program must read.
+- **shell**: A program that reads the commands you type (or a script's lines) and starts other programs for you. Bash is a shell.
+- **shebang**: The first line of a script when it starts with `#!`. It names the program that runs the file, for example `#!/usr/bin/env bash`.
+- **image**: A read-only bundle of files and settings from which containers are started.
+
 ## Why this repository uses it
 
 The template says: never commit build artifacts or local state, and keep `git status` clean after the last commit. The Docker lesson says the build context should be small and must not contain `.env`. A shared `.editorconfig` keeps contributors' editors consistent.

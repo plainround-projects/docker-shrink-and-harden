@@ -4,6 +4,17 @@
 
 curl is a command-line program that sends a request over a network protocol and prints the response. Most often the protocol is HTTP. It is installed on macOS and most Linux systems.
 
+
+**Words used in this note**
+
+- **HTTP**: The request-and-answer language of the web. A client sends a request (a method such as GET or POST, a path, optional headers and a body). The server answers with a status code (200 OK, 404 not found, 500 server error) and a body.
+- **localhost**: The address that always means 'this same computer'. `127.0.0.1` is its numeric form.
+- **image**: A read-only bundle of files and settings from which containers are started.
+- **container**: A process (or a group of processes) run in isolation, with its own view of files, network and process list, but sharing the host's kernel.
+- **port**: A number from 1 to 65535 that says which program on a computer should receive a network connection. A web server listens on a port such as 8080; you reach it as `host:port`.
+- **JSON**: A text format for data. An object is `{"name": "value"}`, a list is `[1, 2]`; values are strings, numbers, `true`, `false` or `null`.
+- **shell**: A program that reads the commands you type (or a script's lines) and starts other programs for you. Bash is a shell.
+
 ## Why this repository uses it
 
 The lesson's smoke test is `curl localhost:8080/health`. The scripts use it to prove each image works: start it, fetch `/health` or `/version`, compare the answer.
