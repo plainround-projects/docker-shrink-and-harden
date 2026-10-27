@@ -65,13 +65,13 @@ health       -> healthy
 
 | Version | What changed | Image size | Cold build | Warm build (1-line change) | Scanner: critical/high | Token lines in `docker history` |
 | --- | --- | --- | --- | --- | --- | --- |
-| v0 | one stage on the full SDK image, token as a build argument | 937 MB | 30.63 s | 60.10 s | 7/290 | 2 |
-| v1 | multi-stage, debian slim runtime | 106 MB | 12.68 s | 11.95 s | 1/56 | 0 |
-| v2 | secret mount for the token, cache mounts | 106 MB | 8.37 s | 3.59 s | 1/56 | 0 |
-| v3 | distroless static, non-root, bases pinned by digest | 8 MB | 8.27 s | 1.39 s | 0/0 | 0 |
-| v4 | v3 plus SBOM and provenance | 8 MB | 22.11 s | 2.79 s | 0/0 | 0 |
+| v0 | one stage on the full SDK image, token as a build argument | 937 MB | 24.75 s | 26.96 s | 7/290 | 2 |
+| v1 | multi-stage, debian slim runtime | 106 MB | 26.38 s | 21.11 s | 1/56 | 0 |
+| v2 | secret mount for the token, cache mounts | 106 MB | 29.88 s | 7.83 s | 1/56 | 0 |
+| v3 | distroless static, non-root, bases pinned by digest | 8 MB | 12.09 s | 7.57 s | 0/0 | 0 |
+| v4 | v3 plus SBOM and provenance | 8 MB | 18.34 s | 6.89 s | 0/0 | 0 |
 
-Measured by `make measure` (arm64, Docker 24.0.6, buildx 0.11, Trivy 0.58 with the vulnerability database of 2026-10-27). Cold: no layer cache and empty cache mounts on the project's own builder, base images already pulled. Warm: one line of `cmd/svc/main.go` changed. The order of the rows is the story: 937 MB to 8 MB (about 117 times smaller), critical and high findings from 7 and 290 to 0 and 0, the token gone from the history at v1 (where it is not used) and kept out at v2 with a secret mount, and the warm build from about a minute to 1.4 seconds once the compiler cache and the layer order work. The cold times of v0 to v2 are close because the module download is empty (the service has no third-party module) and the standard library compiles in seconds on this machine; v0's warm time is not lower than its cold one because nothing in a one-stage build survives a source change. The scanner's absolute counts age with its database; the ratios do not. `tests/e2e/03_warm_build_uses_the_cache.sh` does not rely on seconds: it counts the packages `go build -v` compiles, which falls from the whole standard library to the service's own packages after a one-line change.
+Measured by `make measure` (arm64, Docker 24.0.6, buildx 0.11, Trivy 0.58 with the vulnerability database of 2026-10-27), each warm build after a different one-line change. Cold: no layer cache and empty cache mounts on the project's own builder, base images already pulled. Warm: one line of `cmd/svc/main.go` changed. The story is in the ratios: 937 MB to 8 MB (about 117 times smaller); critical and high findings from 7 and 290 to 0 and 0; the token in two lines of the v0 history and in none after; the warm build from 27 s (v0, nothing survives a source change) to 7.6 s, of which about six seconds is the fixed cost of loading the image into the local Docker. The compile work itself is visible without a stopwatch: `tests/e2e/03_warm_build_uses_the_cache.sh` counts the packages `go build -v` compiles, 196 for a cold build and 1 after a one-line change. The cold times do not fall as fast as the lesson's example because this module has no third-party dependency to download. Absolute seconds depend on the machine and the day; the scanner's counts age with its database; the ratios do not.
 
 ### The token leak, and its absence
 
