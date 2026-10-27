@@ -21,7 +21,7 @@ compiled_packages() {
 
 docker buildx prune --builder "${BUILDER}" --force --filter type=exec.cachemount > /dev/null 2>&1 || true
 cold_log="$(build_version v2 "${WORK}" --no-cache --progress=plain 2>&1)"
-printf '\n// one-line change\n' >> "${WORK}/cmd/svc/main.go"
+printf '\n// one-line change at %s\n' "$(date +%s)" >> "${WORK}/cmd/svc/main.go"
 warm_log="$(build_version v2 "${WORK}" --progress=plain 2>&1)"
 cold="$(compiled_packages "${cold_log}")"
 warm="$(compiled_packages "${warm_log}")"

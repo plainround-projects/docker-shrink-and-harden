@@ -17,7 +17,7 @@ forget_cache_mounts() {
   docker buildx prune --builder "${BUILDER}" --force --filter type=exec.cachemount > /dev/null 2>&1 \
     || docker buildx prune --builder "${BUILDER}" --force > /dev/null
 }
-touch_source() { printf '\n// one-line change for the warm build: %s\n' "$1" >> "${WORK}/cmd/svc/main.go"; }
+touch_source() { printf '\n// one-line change for the warm build: %s at %s\n' "$1" "$(date +%s)" >> "${WORK}/cmd/svc/main.go"; }
 
 what_changed() {
   case "$1" in
