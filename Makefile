@@ -1,12 +1,12 @@
 # make up | run | test | lint | down      (make help lists everything)
 # Go is not needed on this machine: every Go tool runs in a pinned container, so a fresh clone needs only Docker.
-GO_IMAGE := golang:1.25-bookworm@sha256:3b4a11519ad929d1e1d261a12cff056f0c85b735253d7d861346b9c6f8b36437
+GO_IMAGE := golang:1.26-bookworm@sha256:632dff7351799a5a9954a48dc06670ade72ee44e8c351cdc0e5a57af2fea21af
 GOLANGCI_IMAGE := golangci/golangci-lint:v2.15.0-alpine
 HADOLINT_IMAGE := hadolint/hadolint:v2.12.0
 SHELLCHECK_IMAGE := koalaman/shellcheck:v0.10.0
 GOVULNCHECK := golang.org/x/vuln/cmd/govulncheck@v1.1.4
 BUILDER := shrink-and-harden
-REGISTRY_PORT ?= 5001
+REGISTRY_PORT ?= 5057
 DOCKER_GO := docker run --rm -v "$(CURDIR)":/src -v shrink-gomod:/go/pkg/mod -v shrink-gobuild:/root/.cache/go-build -w /src
 
 -include .env
@@ -41,7 +41,7 @@ lint: ## gofmt, go vet, golangci-lint, hadolint, shellcheck, compose config
 	$(DOCKER_GO) $(GO_IMAGE) go vet ./...
 	docker run --rm -v "$(CURDIR)":/src -v shrink-gomod:/go/pkg/mod -v shrink-golangci:/root/.cache -w /src $(GOLANGCI_IMAGE) golangci-lint run ./...
 	docker run --rm -i -v "$(CURDIR)/.hadolint.yaml:/.hadolint.yaml:ro" $(HADOLINT_IMAGE) hadolint - < Dockerfile
-	docker run --rm -v "$(CURDIR):/mnt:ro" -w /mnt $(SHELLCHECK_IMAGE) --external-sources scripts/*.sh tests/e2e/*.sh
+	docker run --rm -v "$(CURDIR):/mnt:ro" -w /mnt $(SHELLCHECK_IMAGE) --external-sources --source-path=SCRIPTDIR scripts/*.sh tests/e2e/*.sh
 	docker compose config --quiet
 
 format: ## apply gofmt
