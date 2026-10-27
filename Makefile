@@ -15,7 +15,7 @@ export
 .PHONY: help netrc builder up run test coverage lint format audit check measure sbom test-e2e down clean
 
 help: ## list the targets
-	@grep -E '^[a-z0-9-]+:.*## ' $(MAKEFILE_LIST) | sed -E 's/:.*## /\t/' | sort
+	@grep -E '^[a-z0-9-]+:.*## ' $(firstword $(MAKEFILE_LIST)) | sed -E 's/:.*## /\t/' | sort
 
 netrc: ## create the demo netrc (a made-up token for a pretend private package server) from netrc.example
 	@[ -f netrc ] || cp netrc.example netrc
