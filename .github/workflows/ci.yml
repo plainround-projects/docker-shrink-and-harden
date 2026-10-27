@@ -1,0 +1,20 @@
+name: ci
+
+on: [push, pull_request]
+
+jobs:
+  check:
+    name: gofmt, go vet, golangci-lint, hadolint, shellcheck, unit tests with coverage, govulncheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: make lint
+      - run: make test
+      - run: make audit
+
+  images:
+    name: Build v0 to v4 and check every Done-when line against real images
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: make test-e2e
