@@ -801,7 +801,7 @@ func TestRunReportsAPortThatIsAlreadyInUse(t *testing.T) {
 ## Try it yourself
 
 1. Run everything: `make test`. Expected: nine `ok` lines, then `coverage of internal/domain: 100.0%` and `internal/application: 100.0%`.
-2. Run one package verbosely: `docker run --rm -v "$PWD:/src" -w /src golang:1.26-bookworm go test -v ./internal/infrastructure/config/`. Expected: `=== RUN TestLoadRejectsBadValuesAndNamesTheSetting/port_not_a_number` and so on, each `PASS`.
+2. Run one package verbosely: `docker run --rm -v "$PWD:/src" -w /src golang:1.26-bookworm go test -v ./internal/infrastructure/config/`. Expected: one `=== RUN` line for `TestLoadRejectsBadValuesAndNamesTheSetting` and one for each of its five subtests (`.../port_not_a_number`, `.../port_too_small`, `.../port_too_large`, `.../timeout_too_large`, `.../unknown_level`), each ending in `PASS`.
 3. Break the rule: in a copy add `import "example.com/svc/internal/interfaces/httpapi"` to `internal/domain/domain.go` and run `go test ./internal/`. Expected: `TestLayersOnlyImportDownward` fails with a message naming the file and the import.
 4. See the race detector work: `make test` runs with `-race`; no output about races means none were found.
 

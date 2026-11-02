@@ -66,7 +66,7 @@ formatters:
   - `bodyclose`: close HTTP response bodies.
   - `noctx`: HTTP requests and listeners must take a `context`.
   - `nilerr`: do not return nil after an error was checked.
-  - `predeclared`: do not shadow `len`, `new` and so on.
+  - `predeclared`: do not declare a variable, function, type or parameter whose name is one of Go's predeclared identifiers, which would hide the real one. Those are the built-in functions `append`, `cap`, `clear`, `close`, `complex`, `copy`, `delete`, `imag`, `len`, `make`, `max`, `min`, `new`, `panic`, `print`, `println`, `real`, `recover`; the types `any`, `bool`, `byte`, `comparable`, `complex64`, `complex128`, `error`, `float32`, `float64`, `int`, `int8`, `int16`, `int32`, `int64`, `rune`, `string`, `uint`, `uint8`, `uint16`, `uint32`, `uint64`, `uintptr`; and the constants `true`, `false`, `iota` and `nil`.
 - `formatters: gofmt, goimports` check layout and import grouping.
 
 Examples of what these rules forced in the code: `net.Listen(...)` became `(&net.ListenConfig{}).Listen(ctx, ...)` (noctx); `defer response.Body.Close()` became `defer func() { _ = response.Body.Close() }()` (errcheck wants the returned error handled, and `_ =` says "I chose to ignore it"); `fmt.Fprintln(w, ...)` became `_, _ = fmt.Fprintln(...)`; the tests listen on `127.0.0.1:0` instead of `:0` (gosec G102).
