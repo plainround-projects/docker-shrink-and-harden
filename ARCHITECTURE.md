@@ -23,6 +23,8 @@ The service is deliberately small, but it follows the same layering as the other
 
 ## Data flow
 
+Drawn versions of this figure and of the walk-through: [the architecture](docs/diagrams/architecture.svg) and [one run](docs/diagrams/flow.svg).
+
 ```mermaid
 flowchart LR
     src[Service source] --> v0["v0 one stage, ARG token"]

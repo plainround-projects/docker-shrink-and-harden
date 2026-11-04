@@ -11,6 +11,24 @@ An image pipeline for a small Go service: a one-stage build on a full SDK image 
 | **Measurements** | [docs/measurements.md](docs/measurements.md) |
 | **Technology notes** | [tech/README.md](tech/README.md): 27 beginner notes, one per technology |
 
+## Architecture
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/architecture-dark.svg">
+  <img alt="The service source is built into five image versions, v0 to v4, in a history of Dockerfiles; the netrc token enters v2 and v3 as a secret mount, and v0 as a build argument. v3 and v4 go to a local registry and the service is deployed by digest; measure.sh builds and scans every version." src="docs/diagrams/architecture.svg">
+</picture>
+
+Notice the two ways the same token reaches a build: the secret mount leaves no trace, while the amber build argument stays in docker history.
+
+## How one run flows
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/flow-dark.svg">
+  <img alt="make run builds v3 with a secret mount, pushes it, runs it by digest and checks health and version; make sbom then adds an SBOM and provenance. The amber row is the v0 build argument that leaves the token in the image history." src="docs/diagrams/flow.svg">
+</picture>
+
+The run ends with the SBOM listing the packages inside the image; the amber row is the v0 mistake the whole history exists to fix.
+
 ## Prerequisites
 
 | Tool | Version | Used for |
